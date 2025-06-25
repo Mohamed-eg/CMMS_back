@@ -39,7 +39,7 @@ exports.loginUser = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials!' });
     
     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30', { expiresIn: '1h' });
-    res.status(200).json({ message: 'Login successful!', token });
+    res.status(200).json({ message: 'Login successful!', token, user });
   } catch (err) {
     console.log(process.env.SECRET_KEY);
     res.status(500).json({ error: err.message });
