@@ -6,9 +6,9 @@ const router = express.Router();
 
 // CREATE - Create a new work order
 router.post('/', async (req, res) => {
-    const { title, description, priority, status } = req.body;
+    const { title, description, priority, status, dueDate, equipment } = req.body;
     try {
-        const workOrder = new WorkOrder({ title, description, priority, status });
+        const workOrder = new WorkOrder({ title, description, priority, status, dueDate, equipment });
         await workOrder.save();
         res.status(201).json({ message: 'Work Order Created Successfully!', workOrder });
     } catch (err) {
@@ -29,12 +29,12 @@ router.get('/', async (req, res) => {
 // Update Work Order
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { title, description, priority, status, dueDate } = req.body;
+    const { title, description, priority, status, dueDate, equipment } = req.body;
   
     try {
       const updatedWorkOrder = await WorkOrder.findByIdAndUpdate(
         id,
-        { title, description, priority, status, dueDate },
+        { title, description, priority, status, dueDate, equipment },
         { new: true } // Return the updated document
       );
   

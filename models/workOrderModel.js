@@ -9,6 +9,15 @@ const workOrderSchema = new mongoose.Schema({
     priority: { type: String, required: true, enum: ['Low', 'Medium', 'High'] },
     status: { type: String, required: true, enum: ['Pending', 'In Progress', 'Completed'] },
     createdAt: { type: Date, default: Date.now },
+    dueDate: { 
+  type: Date, 
+  default: () => {
+    const now = new Date();
+    now.setMonth(now.getMonth() + 1);
+    return now;
+  }
+},
+    equipment: { type: String, required: true },
     updatedAt: { type: Date, default: Date.now }
 });
 
