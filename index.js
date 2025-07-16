@@ -22,11 +22,15 @@ const preventiveMaintenanceRoutes = require('./routes/preventiveMaintenanceRoute
 const assetRoutes = require('./routes/assetRoutes');
 
 const requestRoutes = require('./routes/requests');
+
+const stationsRoutes = require('./routes/stations'); // Import the stations routes
  
 // Routes
 app.use('/api/auth', authRoutes);
 
 app.use('/api/workorders', workOrdersRoute);
+
+app.use('/api/stations', stationsRoutes);
 
 app.use('/api/preventivemaintenance', preventiveMaintenanceRoutes);
 
