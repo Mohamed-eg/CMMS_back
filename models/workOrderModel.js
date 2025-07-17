@@ -22,7 +22,13 @@ const workOrderSchema = new mongoose.Schema({
     Equipment_ID: { type: String, required: true },
     Station_Name: { type: String, required: true },
     equipment: { type: String, required: true },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
+    id: { type: String },
+    issueDescription: { type: String },
+    notes: { type: String },
+    photos: { type: [String], default: [] },
+    urgency: { type: String, enum: ['Normal', 'Urgent', 'Low'], default: 'Normal' },
+    estimatedDuration: { type: String },
 });
 
 // Create a model for the Work Order

@@ -6,9 +6,9 @@ const router = express.Router();
 
 // CREATE - Create a new work order
 router.post('/', async (req, res) => {
-    const { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment,Requested_By,Contact_Info } = req.body;
+    const { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration } = req.body;
     try {
-        const workOrder = new WorkOrder({ title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment,Requested_By,Contact_Info });
+        const workOrder = new WorkOrder({ title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration });
         await workOrder.save();
         res.status(201).json({ message: 'Work Order Created Successfully!', workOrder });
     } catch (err) {
@@ -27,14 +27,14 @@ router.get('/', async (req, res) => {
 });
 
 // Update Work Order
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By,Contact_Info } = req.body;
+router.put('/:_id', async (req, res) => {
+    const { _id } = req.params;
+    const { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration } = req.body;
   
     try {
       const updatedWorkOrder = await WorkOrder.findByIdAndUpdate(
-        id,
-        { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By,Contact_Info },
+        _id,
+        { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration },
         { new: true } // Return the updated document
       );
   
@@ -50,10 +50,10 @@ router.put('/:id', async (req, res) => {
   
 
 // DELETE - Delete a work order
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
+router.delete('/:_id', async (req, res) => {
+    const { _id } = req.params;
     try {
-        await WorkOrder.findByIdAndDelete(id);
+        await WorkOrder.findByIdAndDelete(_id);
         res.status(200).json({ message: 'Work Order Deleted Successfully!' });
     } catch (err) {
         res.status(500).json({ message: 'Failed to delete work order.', error: err.message });
