@@ -24,7 +24,7 @@ const workOrderSchema = new mongoose.Schema({
     id: { type: String },
     issueDescription: { type: String },
     notes: { type: String },
-    photos: { type: [String], default: [] },
+    photos: { type: [String], default: [], required: false },
     urgency: { type: String, enum: ['Normal', 'Urgent', 'Low'], default: 'Normal' },
     estimatedDuration: { type: String },
 });
