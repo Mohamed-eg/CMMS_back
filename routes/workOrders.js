@@ -6,9 +6,9 @@ const router = express.Router();
 
 // CREATE - Create a new work order
 router.post('/', async (req, res) => {
-    const { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration } = req.body;
+    const { title, Equipment_ID, Station_Name, priority, status, dueDate, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration } = req.body;
     try {
-        const workOrder = new WorkOrder({ title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration });
+        const workOrder = new WorkOrder({ title, Equipment_ID, Station_Name, priority, status, dueDate, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration });
         await workOrder.save();
         res.status(201).json({ message: 'Work Order Created Successfully!', workOrder });
     } catch (err) {
@@ -29,12 +29,12 @@ router.get('/', async (req, res) => {
 // Update Work Order
 router.put('/:_id', async (req, res) => {
     const { _id } = req.params;
-    const { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration } = req.body;
+    const { title, Equipment_ID, Station_Name, priority, status, dueDate, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration } = req.body;
   
     try {
       const updatedWorkOrder = await WorkOrder.findByIdAndUpdate(
         _id,
-        { title, Equipment_ID, description, Station_Name, priority, status, dueDate, equipment, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration },
+        { title, Equipment_ID, Station_Name, priority, status, dueDate, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration },
         { new: true } // Return the updated document
       );
   

@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 // Define the schema for a Work Order
 const workOrderSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    description: { type: String, required: true },
     priority: { type: String, required: true, enum: ['Low', 'Medium', 'High'] },
     status: { type: String, default: 'Pending', enum: ['Pending', 'In Progress', 'Completed'] },
     createdAt: { type: Date, default: Date.now },
@@ -21,7 +20,6 @@ const workOrderSchema = new mongoose.Schema({
     Contact_Info: { type: String, required: true },
     Equipment_ID: { type: String, required: true },
     Station_Name: { type: String, required: true },
-    equipment: { type: String, required: true },
     updatedAt: { type: Date, default: Date.now },
     id: { type: String },
     issueDescription: { type: String },
