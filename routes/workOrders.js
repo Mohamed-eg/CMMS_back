@@ -35,19 +35,20 @@ router.get('/:_id', async (req, res) => {
             return res.status(404).json({ message: 'Work Order not found' });
         }
         res.status(200).json(workOrder);
+        console.log(workOrder);
     } catch (err) {
         res.status(500).json({ message: 'Failed to fetch work order.', error: err.message });
     }
 });
 
 // Update Work Order
-router.put('/:_id', async (req, res) => {
-    const { _id } = req.params;
+router.put('/:id', async (req, res) => {
+    const  WorkOrderID  = req.params.id;
     const { title, Equipment_ID, Station_Name, priority, status, dueDate, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration } = req.body;
   
     try {
       const updatedWorkOrder = await WorkOrder.findByIdAndUpdate(
-        _id,
+      WorkOrderID,
         { title, Equipment_ID, Station_Name, priority, status, dueDate, Requested_By, Contact_Info, id, issueDescription, notes, photos, urgency, estimatedDuration },
         { new: true } // Return the updated document
       );
