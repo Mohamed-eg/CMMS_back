@@ -26,6 +26,20 @@ router.get('/', async (req, res) => {
     }
 });
 
+// READ - Get work order by ID
+router.get('/:_id', async (req, res) => {
+    const { _id } = req.params;
+    try {
+        const workOrder = await WorkOrder.findById(_id);
+        if (!workOrder) {
+            return res.status(404).json({ message: 'Work Order not found' });
+        }
+        res.status(200).json(workOrder);
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to fetch work order.', error: err.message });
+    }
+});
+
 // Update Work Order
 router.put('/:_id', async (req, res) => {
     const { _id } = req.params;
