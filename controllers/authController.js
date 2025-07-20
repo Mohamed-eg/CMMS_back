@@ -9,17 +9,29 @@ const jwt = require('jsonwebtoken');
 // Register a new user
 exports.registerUser = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { FirstName, LastName, Email, Phone, Role, Status, Password } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ Email });
     if (existingUser) return res.status(400).json({ message: 'User already exists!' });
 
+    // Validate Role
+    const validRoles = ["Admin", "Manager", "Technician"];
+    if (!validRoles.includes(Role)) {
+      return res.status(400).json({ message: 'Invalid role. Must be Admin, Manager, or Technician.' });
+    }
+
+    // Validate Status
+    const validStatus = ["Active", "Inactive"];
+    if (!validStatus.includes(Status)) {
+      return res.status(400).json({ message: 'Invalid status. Must be Active or Inactive.' });
+    }
+
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(Password, 10);
 
     // Create user
-    const user = new User({ fullName, email, password: hashedPassword });
+    const user = new User({ FirstName, LastName, Email, Phone, Role, Status, Password: hashedPassword });
     await user.save();
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (err) {
@@ -45,3 +57,5 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+

@@ -15,6 +15,8 @@ app.use(cors());
 //Routes
 const authRoutes = require('./routes/auth');
 
+const userRoutes = require('./routes/users');
+
 const workOrdersRoute = require('./routes/workOrders');
 
 const preventiveMaintenanceRoutes = require('./routes/preventiveMaintenanceRoutes');
@@ -27,6 +29,8 @@ const stationsRoutes = require('./routes/stations'); // Import the stations rout
  
 // Routes
 app.use('/api/auth', authRoutes);
+
+app.use('/api/users', userRoutes);
 
 app.use('/api/workorders', workOrdersRoute);
 
