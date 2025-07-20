@@ -5,39 +5,39 @@ const jwt = require('jsonwebtoken');
 // Register a new user
 exports.CreateUser = async (req, res) => {
   try {
-    const { FirstName, LastName, Avatar, Email, Phone, Station_Name, Role, Status, Password, joinDate } = req.body;
+    const { firstName, lastName, avatar, email, phone, station_Name, role, status, password, join_date } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ Email });
+    const existingUser = await User.findOne({ email: email });
     if (existingUser) return res.status(400).json({ message: 'User already exists!' });
 
-    // Validate Role
+    // Validate role
     const validRoles = ["Admin", "Manager", "Technician"];
-    if (!validRoles.includes(Role)) {
+    if (!validRoles.includes(role)) {
       return res.status(400).json({ message: 'Invalid role. Must be Admin, Manager, or Technician.' });
     }
 
-    // Validate Status
+    // Validate status
     const validStatus = ["Active", "Inactive"];
-    if (!validStatus.includes(Status)) {
+    if (!validStatus.includes(status)) {
       return res.status(400).json({ message: 'Invalid status. Must be Active or Inactive.' });
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(Password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const user = new User({
-      FirstName,
-      LastName,
-      Avatar: Avatar || undefined,
-      Email,
-      Phone,
-      Station_Name: Station_Name || undefined,
-      Role,
-      Status,
-      Password: hashedPassword,
-      joinDate: joinDate || undefined
+      firstName: firstName,
+      lastName: lastName,
+      avatar: avatar || undefined,
+      email: email,
+      phone: phone,
+      station_Name: station_Name || undefined,
+      role: role,
+      status: status,
+      password: hashedPassword,
+      joinDate: join_date || undefined
     });
     await user.save();
     res.status(201).json({ message: 'User registered successfully!' });
@@ -72,8 +72,8 @@ exports.getUsers = async (req, res) => {
   // Update user by ID
   exports.updateUser = async (req, res) => {
     try {
-      const { FirstName, LastName, Email, Phone, Role, Status } = req.body;
-      const updateFields = { FirstName, LastName, Email, Phone, Role, Status };
+      const { firstName, lastName, email, phone, Role, Status } = req.body;
+      const updateFields = { firstName, lastName, email, phone, Role, Status };
       // Remove undefined fields
       Object.keys(updateFields).forEach(key => updateFields[key] === undefined && delete updateFields[key]);
       const user = await User.findByIdAndUpdate(
