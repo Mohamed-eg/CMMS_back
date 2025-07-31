@@ -12,6 +12,7 @@ const MaintenanceHistorySchema = new mongoose.Schema({
 const AssetSchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
   name: { type: String, required: true },
+  assetCode:{ type: String, required: true, unique: true },
   category: { type: String, required: true },
   location: { type: String, required: true },
   gpsCoordinates: { type: String, required: true },

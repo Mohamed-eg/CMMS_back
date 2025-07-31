@@ -8,6 +8,7 @@ const Joi = require('joi');
 const assetSchema = Joi.object({
   id: Joi.string().required(),
   name: Joi.string().required(),
+  assetCode: Joi.string().required(),
   category: Joi.string().required(),
   location: Joi.string().required(),
   gpsCoordinates: Joi.string().required(),
