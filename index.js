@@ -10,7 +10,16 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+  origin: [
+    'http://localhost:3000', // your frontend dev server
+    'https://v0-next-js-frontend-build-iota.vercel.app/', // your production frontend (if any)
+  ],
+  credentials: true, // if you use cookies or authentication
+};
+
+app.use(cors(corsOptions));
 
 //Routes
 const authRoutes = require('./routes/auth');
