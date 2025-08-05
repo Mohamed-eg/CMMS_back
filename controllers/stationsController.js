@@ -23,6 +23,20 @@ const getAllStations = async (req, res) => {
     }
 };
 
+// READ - Get all station names and IDs
+const getAllStationNames = async (req, res) => {
+    try {
+        const stations = await Stations.find({}, 'stationInfo.name _id');
+        const formattedStations = stations.map(station => ({
+            name: station.stationInfo.name,
+            _id: station._id
+        }));
+        res.status(200).json(formattedStations);
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to fetch station names.', error: err.message });
+    }
+};
+
 // READ - Get a specific station with populated workers
 const getStationById = async (req, res) => {
     try {
@@ -216,6 +230,7 @@ const deleteStation = async (req, res) => {
 module.exports = {
     createStation,
     getAllStations,
+    getAllStationNames,
     getStationById,
     getAllStationsWithWorkers,
     getStationWorkers,

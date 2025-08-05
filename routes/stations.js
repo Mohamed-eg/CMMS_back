@@ -5,6 +5,7 @@ const router = express.Router();
 const {
     createStation,
     getAllStations,
+    getAllStationNames,
     getStationById,
     getAllStationsWithWorkers,
     getStationWorkers,
@@ -20,6 +21,9 @@ router.post('/', createStation);
 
 // READ - Get all stations
 router.get('/', getAllStations);
+
+// READ - Get all station names and IDs
+router.get('/names', getAllStationNames);
 
 // READ - Get a specific station with populated workers
 router.get('/:id', getStationById);
