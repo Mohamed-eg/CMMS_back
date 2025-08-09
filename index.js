@@ -18,13 +18,14 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 
 const workOrdersRoute = require('./routes/workOrders');
-const workOrdersStatsRoutes = require('./routes/workOrdersStats');
 
 const preventiveMaintenanceRoutes = require('./routes/preventiveMaintenanceRoutes');
 
 const assetRoutes = require('./routes/assetRoutes');
 
 const requestRoutes = require('./routes/requests');
+
+const dashboardRoutes = require('./routes/dashboard');
 
 const stationsRoutes = require('./routes/stations'); // Import the stations routes
  
@@ -33,8 +34,10 @@ app.use('/api/auth', authRoutes);
 
 app.use('/api/users', userRoutes);
 
+app.use('/api/dashboard', dashboardRoutes);
+
 app.use('/api/workorders', workOrdersRoute);
-app.use('/api/workorders', workOrdersStatsRoutes);
+
 
 app.use('/api/stations', stationsRoutes);
 
