@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const { getWorkOrderStats } = require('../controllers/workOrdersStatsController');
+const { getDashboardSummary } = require('../controllers/dashboardController');
 
-// STATS - Get counts of total, in-progress, pending, and overdue work orders
-router.get('/stats', getWorkOrderStats);
+// GET /api/dashboard/summary
+router.get('/summary', getDashboardSummary);
 
 module.exports = router; 
