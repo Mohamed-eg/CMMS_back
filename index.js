@@ -10,16 +10,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-
-const corsOptions = {
-  origin: [
-    'http://localhost:3000', // your frontend dev server
-    'https://v0-next-js-frontend-build-iota.vercel.app/', // your production frontend (if any)
-  ],
-  credentials: true, // if you use cookies or authentication
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 //Routes
 const authRoutes = require('./routes/auth');
@@ -27,6 +18,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 
 const workOrdersRoute = require('./routes/workOrders');
+const workOrdersStatsRoutes = require('./routes/workOrdersStats');
 
 const preventiveMaintenanceRoutes = require('./routes/preventiveMaintenanceRoutes');
 
@@ -42,6 +34,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
 app.use('/api/workorders', workOrdersRoute);
+app.use('/api/workorders', workOrdersStatsRoutes);
 
 app.use('/api/stations', stationsRoutes);
 
