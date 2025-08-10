@@ -48,4 +48,37 @@ const getDashboardSummary = async (req, res) => {
   }
 };
 
-module.exports = { getDashboardSummary }; 
+// GET /api/dashboard/sidebarInfo
+// Returns total work orders, total assets, and station-specific work orders for managers
+const getSidebarInfo = async (req, res) => {
+  try {
+    const { userRole, userStation } = req.query; // Get user info from query params
+
+    // Get total counts
+    const [totalWorkOrders, totalAssets] = await Promise.all([
+      WorkOrder.countDocuments({}),
+      Asset.countDocuments({})
+    ]);
+
+    let stationWorkOrders = null;
+
+    // If user is a manager, get work orders for their assigned station
+    if (userRole === 'Manager' && userStation) {
+      stationWorkOrders = await WorkOrder.find({ 
+        Station_Name: userStation 
+      }).sort({ createdAt: -1 }).limit(10); // Get last 10 work orders for the station
+    }
+
+    res.status(200).json({
+      totalWorkOrders,
+      totalAssets,
+      stationWorkOrders,
+      userRole,
+      userStation
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch sidebar info.', error: err.message });
+  }
+};
+
+module.exports = { getDashboardSummary, getSidebarInfo }; 

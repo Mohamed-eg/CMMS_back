@@ -26,7 +26,7 @@ const getAllStations = async (req, res) => {
 // READ - Get all station names and IDs
 const getAllStationNames = async (req, res) => {
     try {
-        const stations = await Stations.find({}, 'stationInfo.name _id');
+        const stations = await Stations.find({}, 'stationInfo. _id');
         const formattedStations = stations.map(station => ({
             name: station.stationInfo.name,
             _id: station._id
