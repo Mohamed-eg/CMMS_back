@@ -6,6 +6,7 @@ const {
     createStation,
     getAllStations,
     getAllStationNames,
+    searchStationsByName,
     getStationById,
     getAllStationsWithWorkers,
     getStationWorkers,
@@ -24,6 +25,9 @@ router.get('/', getAllStations);
 
 // READ - Get all station names and IDs
 router.get('/names', getAllStationNames);
+
+// SEARCH - Search stations by name
+router.get('/search', searchStationsByName);
 
 // READ - Get a specific station with populated workers
 router.get('/:id', getStationById);

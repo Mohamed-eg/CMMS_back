@@ -26,7 +26,7 @@ const getAllStations = async (req, res) => {
 // READ - Get all station names and IDs
 const getAllStationNames = async (req, res) => {
     try {
-        const stations = await Stations.find({}, 'stationInfo. _id');
+        const stations = await Stations.find({}, 'stationInfo.name _id');
         const formattedStations = stations.map(station => ({
             name: station.stationInfo.name,
             _id: station._id
@@ -34,6 +34,41 @@ const getAllStationNames = async (req, res) => {
         res.status(200).json(formattedStations);
     } catch (err) {
         res.status(500).json({ message: 'Failed to fetch station names.', error: err.message });
+    }
+};
+
+// SEARCH - Search stations by name
+const searchStationsByName = async (req, res) => {
+    try {
+        const { name } = req.query;
+        
+        if (!name || name.trim() === '') {
+            return res.status(400).json({ message: 'Station name is required for search.' });
+        }
+
+        // Case-insensitive search using regex
+        const searchRegex = new RegExp(name.trim(), 'i');
+        
+        const stations = await Stations.find({
+            'stationInfo.name': searchRegex
+        }).populate('Workers.user', 'firstName lastName email phone role station_Name status joinDate avatar');
+
+        if (stations.length === 0) {
+            return res.status(200).json({
+                message: 'No stations found matching the search criteria.',
+                stations: [],
+                searchTerm: name.trim()
+            });
+        }
+
+        res.status(200).json({
+            message: `Found ${stations.length} station(s) matching "${name.trim()}"`,
+            stations,
+            searchTerm: name.trim(),
+            totalResults: stations.length
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to search stations.', error: err.message });
     }
 };
 
@@ -231,6 +266,7 @@ module.exports = {
     createStation,
     getAllStations,
     getAllStationNames,
+    searchStationsByName,
     getStationById,
     getAllStationsWithWorkers,
     getStationWorkers,
