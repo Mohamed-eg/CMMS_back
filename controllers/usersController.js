@@ -1,11 +1,12 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Stations = require('../models/Stations');
 
 // Register a new user
 exports.CreateUser = async (req, res) => {
   try {
-    const { firstName, lastName, avatar, email, phone, station_Name, role, status, password, join_date } = req.body;
+    const { firstName, lastName, avatar, email, phone, station_Name, stationId, role, status, password, join_date } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email: email });
@@ -23,6 +24,15 @@ exports.CreateUser = async (req, res) => {
       return res.status(400).json({ message: 'Invalid status. Must be Active or Inactive.' });
     }
 
+    // Validate station if provided
+    let station = null;
+    if (stationId) {
+      station = await Stations.findById(stationId);
+      if (!station) {
+        return res.status(400).json({ message: 'Invalid station ID provided.' });
+      }
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -33,7 +43,8 @@ exports.CreateUser = async (req, res) => {
       avatar: avatar || undefined,
       email: email,
       phone: phone,
-      station_Name: station_Name || undefined,
+      station_Name: station_Name || (station ? station.stationInfo.name : undefined),
+      station: stationId || undefined,
       role: role,
       status: status,
       password: hashedPassword,
@@ -55,6 +66,18 @@ exports.getUsers = async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   };
+
+// Get all users with populated station info
+exports.getUsersWithStations = async (req, res) => {
+    try {
+      const users = await User.find({}, '-Password')
+        .populate('station', 'stationInfo.name stationInfo.location stationInfo.stationCode')
+        .exec();
+      res.status(200).json(users);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
   
   // Get user by ID
   exports.getUserById = async (req, res) => {
@@ -68,14 +91,41 @@ exports.getUsers = async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   };
+
+// Get user by ID with populated station info
+exports.getUserByIdWithStation = async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id, '-Password')
+        .populate('station', 'stationInfo.name stationInfo.location stationInfo.stationCode')
+        .exec();
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.status(200).json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
   
   // Update user by ID
   exports.updateUser = async (req, res) => {
     try {
-      const { firstName, lastName, email, phone, Role, Status } = req.body;
+      const { firstName, lastName, email, phone, Role, Status, stationId } = req.body;
       const updateFields = { firstName, lastName, email, phone, Role, Status };
+      
+      // Handle station update if stationId is provided
+      if (stationId) {
+        const station = await Stations.findById(stationId);
+        if (!station) {
+          return res.status(400).json({ message: 'Invalid station ID provided.' });
+        }
+        updateFields.station = stationId;
+        updateFields.station_Name = station.stationInfo.name;
+      }
+      
       // Remove undefined fields
       Object.keys(updateFields).forEach(key => updateFields[key] === undefined && delete updateFields[key]);
+      
       const user = await User.findByIdAndUpdate(
         req.params.id,
         updateFields,
