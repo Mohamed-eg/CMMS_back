@@ -27,7 +27,7 @@ router.get('/', getAllStations);
 router.get('/names', getAllStationNames);
 
 // SEARCH - Search stations by name
-router.post('/search', searchStationsByName);
+router.get('/search', searchStationsByName);
 
 // READ - Get a specific station with populated workers
 router.get('/:id', getStationById);
