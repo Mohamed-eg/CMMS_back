@@ -60,7 +60,7 @@ exports.CreateUser = async (req, res) => {
 // Get all users
 exports.getUsers = async (req, res) => {
     try {
-      const users = await User.find({}, '-Password'); // Exclude password from results
+      const users = await User.find({}, '-Password').limit(8); // Limit to first 8 users
       res.status(200).json(users);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -74,6 +74,23 @@ exports.getUsersWithStations = async (req, res) => {
         .populate('station', 'stationInfo.name stationInfo.location stationInfo.stationCode')
         .exec();
       res.status(200).json(users);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
+// Get users with Manager role
+exports.getManagers = async (req, res) => {
+    try {
+      const managers = await User.find({ role: 'Manager' }, '-Password')
+        .populate('station', 'stationInfo.name stationInfo.location stationInfo.stationCode')
+        .exec();
+      
+      res.status(200).json({
+        message: `Found ${managers.length} manager(s)`,
+        managers,
+        totalManagers: managers.length
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

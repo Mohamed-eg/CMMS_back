@@ -7,13 +7,15 @@ const {
   updateUser, 
   deleteUser,
   getUsersWithStations,
-  getUserByIdWithStation
+  getUserByIdWithStation,
+  getManagers
 } = require('../controllers/usersController');
 const router = express.Router();
 
 router.post('/', CreateUser);
 router.get('/', getUsers); 
 router.get('/with-stations', getUsersWithStations);
+router.get('/managers', getManagers);
 router.get('/:id', getUserById);
 router.get('/:id/with-station', getUserByIdWithStation);
 router.put('/:id', updateUser);
